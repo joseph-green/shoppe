@@ -1,0 +1,94 @@
+.header {
+	min-height: 60vh;
+	background-image: url("../pics/0001.jpg");
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center center;
+}
+.header h1 {
+	font-family: 'Playfair Display';
+	font-weight: bold;
+	color: white;
+	font-size: 6em;
+	text-align: center;
+}
+.header p {
+	font-family: 'Open Sans';
+	color: white;
+	font-weight: 300;
+	font-size: 1.5em;
+	text-transform: uppercase;
+	text-align: center;
+}
+
+.footer {
+	min-height: 30vh;
+	background-color: #322E34;
+	color: white;
+}
+
+.bottom-logo h3 {
+	font-family: 'Playfair Display';
+	font-weight: bold;
+	color: white;
+	font-size: 3em;
+	text-align: center;
+}
+.bottom-logo p {
+	font-family: 'Open Sans';
+	color: white;
+	font-weight: 300;
+	font-size: 1em;
+	text-transform: uppercase;
+	text-align: center;
+}
+#headline {
+	font-family: 'Open Sans';
+	text-align: center;
+	font-size: 0.9em;
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+	
+}
+.item {
+	height: 33vw;
+	padding: 0;
+	font-family: 'Open Sans';
+	text-align: center;
+	margin: 1em 0;
+}
+.item img {
+	height: 20vw;
+	margin: 0;
+}
+
+.prod-info {
+	margin: 1em;
+
+}
+#prod-name {
+	color: black;
+	font-size: 1.5em;
+	text-transform: uppercase;
+
+}
+#prod-price {
+	font-size: 1.2em;
+	font-weight: 300;
+	margin-bottom: 1.5em;
+}
+
+#prod-buy {
+	background-color: #322E34;
+	color: white;
+	padding: 0.5em 2em;
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+	border-radius: 0.1em;
+	display: inline-block;
+
+}
+#prod-buy:hover {
+	text-decoration: none;
+
+}

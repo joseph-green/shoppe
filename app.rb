@@ -39,11 +39,9 @@ get '/' do
 	#display the site
 	#index of all products
 	@items = Item.all
-	@items.each do |i|
-		puts i.name
-	end
-	#loads the erb
 	
+	#loads the erb
+	erb :root
 end
 
 get '/new' do
@@ -105,7 +103,25 @@ post '/:product_id/update' do |id|
 		:price=>params['price'].to_f,
 		:product_description=>params['description'])
 
+end
+
+get '/:product_id/delete' do |id|
+	#checks admin
+	halt 401 unless session[:admin]
+	#verifies whether you want the product to be deleted
+	begin
+		@item = Item.get!(:id => id)
+	rescue ObjectNotFoundError
+		redirect to("/404?error=Item+Not+Found")
+	end
+	
 end 
+
+post '/:product_id/delete' do |id|
+	#checks admin
+	halt 401 unless session[:admin]
+
+end
 
 
 
@@ -115,10 +131,10 @@ get '/:product_id/buy' do |id|
 	#loads purchasing page (erb), which is form to insert purchasing info
 	begin
 		@item = Item.get!(:id => id)
-	rescue ObjectNotFoundError
+	rescue
 		redirect to("/404?error=Item+Not+Found")
 	end
-	
+
 
 end
 
@@ -128,11 +144,14 @@ post '/:product_id/buy' do |id|
 
 end
 
+get '/404' do
+	p params['error']
+end
 
 
 
 
-namespace '/admin'
+namespace '/admin' do
 	get '/login' do
 		#admin login
 		#loads form
@@ -146,7 +165,8 @@ namespace '/admin'
 	post '/login' do
 		begin
 			@admin = Admin.find(:username => params['username'])
-		else
+
+		rescue
 			redirect to('/login?error=username'), "Sorry, we couldn't find an admin with that username"
 		end
 		redirect to('/login?error=password') unless @admin.password = params['password']

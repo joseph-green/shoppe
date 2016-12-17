@@ -1,0 +1,12 @@
+<% @items.each do |i| %>
+<div class='col-xs-12 col-sm-6 col-md-4 item'>
+			<%= i.id %>
+			<img src="../pics/products/CR<%= i.id.to_s.rjust(4, "0") %>.jpg">
+			<div class='prod-info'>
+			<p id='prod-name'><%= i.name %></p>
+			<p id='prod-price'>$<%= i.price %></p>
+			<a id='prod-buy' href="<%= i.id %>/buy">Cop</a>
+			</div>
+
+</div>
+<% end %>
