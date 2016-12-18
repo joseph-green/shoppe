@@ -9,7 +9,7 @@ require 'dm-timestamps'
 
 
 enable :sessions
-DataMapper.setup(:default,"sqlite://#{Dir.pwd}/database.db")
+DataMapper.setup(:default,"sqlite://#{Dir.pwd}/items.db")
 
 class Item
 	include DataMapper::Resource
@@ -17,7 +17,7 @@ class Item
 	property :id, Serial
 	property :name, String
 	property :product_description, String
-	property :price, Decimal
+	property :price, Numeric
 	property :created_at, DateTime
 	
 	
@@ -50,6 +50,7 @@ get '/new' do
 	#sends POST request after "submit" is clicked
 	halt 401 unless session[:admin]
 	#loads the erb
+	erb :new
 end
 
 post '/new' do
@@ -58,10 +59,11 @@ post '/new' do
 	halt 401 unless session[:admin]
 	@item = Item.new(
 		:name=>params['name'],
-		:price=>params['price'].to_f,
+		:price=>params['price'].to_i,
 		:created_at=>Time.now,
 		:product_description=>params['description'])
 	@item.save
+	redirect to("/")
 		
 end
 
@@ -69,39 +71,42 @@ end
 
 
 
-get '/:product_id/update' do |id|
+get '/:product_id/edit' do |id|
 	#checks admin
 	#displays form to edit existing product
 	#sends POST request after "submit" is clicked
 	halt 401 unless session[:admin]
 	#check to see if the item exists in the database
 	begin
-		@item = Item.get!(:id => id)
+		@item = Item.get(id.to_i)
 	rescue ObjectNotFoundError
 		redirect to("/404?error=Item+Not+Found")
 	end
 	#loads the erb template
+	
+	erb :update
 
 
 
 end 
 
-post '/:product_id/update' do |id|
+post '/:product_id/edit' do |id|
 	#checks admin
 	#updates information in the database
 	halt 401 unless session[:admin]
 	#check to see if the item exists in the database
 	begin
-		@item = Item.get!(:id => id)
+		@item = Item.get(id.to_i)
 	rescue ObjectNotFoundError
 		redirect to("/404?error=Item+Not+Found")
 	end
 	#updates the record
 	#there should be a more finesse way to update only one attribute at time
-	@item = Item.update(
+	@item.update(
 		:name=>params['name'],
-		:price=>params['price'].to_f,
+		:price=>params['price'].to_i,
 		:product_description=>params['description'])
+	redirect to("/")
 
 end
 
@@ -110,10 +115,12 @@ get '/:product_id/delete' do |id|
 	halt 401 unless session[:admin]
 	#verifies whether you want the product to be deleted
 	begin
-		@item = Item.get!(:id => id)
+		@item = Item.get(id.to_i)
 	rescue ObjectNotFoundError
 		redirect to("/404?error=Item+Not+Found")
 	end
+	@item.destroy
+	
 	
 end 
 
@@ -129,11 +136,9 @@ end
 get '/:product_id/buy' do |id|
 	#actually buying the product
 	#loads purchasing page (erb), which is form to insert purchasing info
-	begin
-		@item = Item.get!(:id => id)
-	rescue
-		redirect to("/404?error=Item+Not+Found")
-	end
+	
+		@item = Item.get(id.to_i)
+	
 
 
 end
@@ -158,19 +163,40 @@ namespace '/admin' do
 		#send POST request to "/login" when clicked
 
 		#loads the erb
+		erb :login
 
 
 	end
 
 	post '/login' do
 		begin
-			@admin = Admin.find(:username => params['username'])
+			@admin = Admin.all(:username => params['username'])[0]
 
 		rescue
 			redirect to('/login?error=username'), "Sorry, we couldn't find an admin with that username"
 		end
-		redirect to('/login?error=password') unless @admin.password = params['password']
+		redirect to('/login?error=password') unless @admin.password == params['password']
 		session[:admin] = true
+		redirect to('/')
+	end
+
+	get '/new' do
+
+		#halt 401 unless session[:admin]
+
+		erb :new_admin
+
+	end
+
+	post '/new' do
+
+		halt 401 unless session[:admin]
+		
+		@admin = Admin.new(
+			:username => params['username'],
+			:password => params['password'])
+		
+		@admin.save
 		redirect to('/')
 	end
 end
