@@ -1,9 +1,10 @@
 .header {
-	min-height: 60vh;
+
 	background-image: url("../pics/0001.jpg");
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-position: center center;
+	padding: 1em 0; 
 }
 .header h1 {
 	font-family: 'Playfair Display';
@@ -22,12 +23,12 @@
 }
 
 .footer {
-	min-height: 30vh;
+
 	background-color: #322E34;
 	color: white;
 }
 .footer ul {
-	margin: 0 auto;
+	margin: 0 auto 1em;
 	text-align: center;
 } 
 .footer li {
@@ -93,7 +94,7 @@
 	margin-bottom: 1.5em;
 }
 
-#prod-buy {
+#prod-buy, input[type*=submit] {
 	background-color: #322E34;
 	color: white;
 	padding: 0.5em 2em;
@@ -101,6 +102,7 @@
 	letter-spacing: 0.1em;
 	border-radius: 0.1em;
 	display: inline-block;
+	border: none;
 
 }
 #prod-buy:hover {
@@ -108,9 +110,24 @@
 
 }
 .admin-form, .item-form {
-	margin: 0 auto;
-	text-align: center;
-}
-.item-form input, .admin-form input {
 	display: block;
+	margin: 6em; auto;
+
+	
+
+}
+input[type*=text] {
+	display: block;
+	margin-bottom: 2em;
+	width: 50%;
+}
+.form-label {
+	font-family: 'Open Sans';
+	font-size: 0.8em;
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+	padding: 0;
+}
+.content {
+	padding-bottom: 1em;
 }

@@ -113,6 +113,16 @@ end
 get '/:product_id/delete' do |id|
 	#checks admin
 	halt 401 unless session[:admin]
+	
+	erb :delete
+	
+	
+end 
+
+post '/:product_id/delete' do |id|
+	
+	#checks admin
+	halt 401 unless session[:admin]
 	#verifies whether you want the product to be deleted
 	begin
 		@item = Item.get(id.to_i)
@@ -120,13 +130,6 @@ get '/:product_id/delete' do |id|
 		redirect to("/404?error=Item+Not+Found")
 	end
 	@item.destroy
-	
-	
-end 
-
-post '/:product_id/delete' do |id|
-	#checks admin
-	halt 401 unless session[:admin]
 
 end
 

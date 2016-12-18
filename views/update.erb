@@ -1,7 +1,11 @@
 <h2 id='headline'>Edit <%= @item.name %></h2>
+<div class='padding col-sm-2 col-md-3'></div>
 <form class='item-form col-xs-12 col-sm-9 col-md-6' method='POST' action='/<%= @item.id %>/edit'>
+	<p class='form-label'>Product Name</p>
 	<input type='text' name='name' value="<%= @item.name %>">
+	<p class='form-label'>Price</p>
 	<input type='text' name='price' value="<%= @item.price %>">
+	<p class='form-label'>Description</p>
 	<input type='text' name='description' value="<%= @item.product_description %>">
 	<input type='submit'>
 </form>
