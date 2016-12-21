@@ -73,7 +73,7 @@
 	text-align: center;
 	margin: 1em 0;
 }
-.item img {
+.item img, .item-photo img {
 	height: 20vw;
 	margin: 0;
 }
@@ -82,16 +82,28 @@
 	margin: 1em;
 
 }
+.show-item {
+	border: 1px solid #322E34;
+	border-radius: 0.5em;
+	display: block;
+}
+.prod-buy-info {
+	text-align: center;
+	padding-top: 10vh;
+
+}
 #prod-name {
 	color: black;
 	font-size: 1.5em;
 	text-transform: uppercase;
+	text-align: center;
 
 }
 #prod-price {
 	font-size: 1.2em;
 	font-weight: 300;
 	margin-bottom: 1.5em;
+	text-align: center;
 }
 
 #prod-buy, input[type*=submit] {
@@ -116,7 +128,7 @@
 	
 
 }
-input[type*=text] {
+input[type*=text], input[type*=password] {
 	display: block;
 	margin-bottom: 2em;
 	width: 50%;
@@ -130,4 +142,20 @@ input[type*=text] {
 }
 .content {
 	padding-bottom: 1em;
+}
+select {
+	font-family: 'Open Sans';
+	font-size: 0.9em;
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+	padding: 0;
+	display: block;
+	margin-bottom: 2em;
+}
+.payment-form {
+	display: block;
+	margin: 0 auto;
+}
+.payment-form input[type*=text], .payment-form select {
+	width: 95%;
 }

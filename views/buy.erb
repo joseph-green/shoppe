@@ -1,0 +1,147 @@
+<script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+<script type="text/javascript">
+  Stripe.setPublishableKey('pk_test_QozguyVyz4JO1FVlz77Xs7lV');
+
+  $(function() {
+  var $form = $('.payment-form');
+
+  $form.submit(function(event) {
+    // Disable the submit button to prevent repeated clicks:
+    $form.find('input[type*=submit]').prop('disabled', true);
+
+    // Request a token from Stripe:
+    Stripe.card.createToken($form, stripeResponseHandler);
+
+    // Prevent the form from being submitted:
+    return false;
+  });
+  function stripeResponseHandler(status, response) {
+  // Grab the form:
+  var $form = $('.payment-form');
+
+  if (response.error) { // Problem!
+
+    // Show the errors on the form:
+    $form.find('.payment-errors').text(response.error.message);
+    $form.find('input[type*=submit]').prop('disabled', false); // Re-enable submission
+
+  } else { // Token was created!
+
+    // Get the token ID:
+    var token = response.id;
+
+    // Insert the token ID into the form so it gets submitted to the server:
+    $form.append($('<input type="hidden" name="stripeToken">').val(token));
+
+    // Submit the form:
+    $form.get(0).submit();
+  }
+};
+});
+</script>
+
+
+<h2 id='headline'>Buy <%= @item.name %></h2>
+<div class='padding col-sm-2 col-md-3'></div>
+<div class='col-md-6 show-item'>
+	
+	<div class='col-md-6 item-photo'>
+		<img src="../pics/products/CR<%= @item.id.to_s.rjust(4, "0") %>.jpg">
+	</div>
+	<div class='col-md-6 prod-buy-info'>
+		<p id='prod-name'><%= @item.name %></p>
+		<p id='prod-price'>$<%= @item.price %></p>
+	</div>
+</div>
+<div class='padding col-sm-2 col-md-3'></div>
+
+<form class='payment-form' method='POST' action='/<%= @item.id %>/buy'>
+
+		<div class='payment-errors col-md-12'>
+		
+		</div>
+	<div class='padding col-sm-2 col-md-2'></div>
+
+
+	<div class='payment-info col-md-4'>
+
+
+		<div class='info-section col-md-12'>
+		<p class='form-label'>Full Name</p>
+		<input type='text' name='full_name'>
+		</div>
+
+		<div class='info-section col-md-12'>
+		<p class='form-label'>Address</p>
+		<input type='text' name='adress'>
+		</div>
+
+		<div class='info-section col-md-5'>
+		<p class='form-label'>City</p> 
+		<input type='text' name='city'>
+		</div>
+
+		<div class='info-section col-md-4'>
+		<p class='form-label'>Province</p>
+		<select name='province'>
+			<option value='AB'>Alberta</option>
+			<option value='BC'>British Columbia</option>
+			<option value='ON'>Manitoba</option>
+			<option value='ON'>Newfoundland</option>
+			<option value='NB'>New Brunswick</option>
+			<option value='NW'>Northwest Territories</option>
+			<option value='NS'>Nova Scotia</option>
+			<option value='NV'>Nunavut</option>
+			<option value='ON'>Ontario</option>
+			<option value='QC'>Quebec</option>
+			<option value='SK'>Saskatchewan</option>
+			<option value='YK'>Yukon</option>
+		</select>
+		</div>
+
+		<div class='info-section col-md-3'>
+		<p class='form-label'>Zip Code</p>
+		<input size="6" type='text' name='postal_code' data-stripe="address_zip">
+		</div>
+
+		<div class='info-section col-md-6'>
+		<p class='form-label'>Phone Number</p>
+		<input type='text' name='phone_number'>
+		</div>
+
+		<div class='info-section col-md-6'>
+		<p class='form-label'>Email</p>
+		<input type='text' name='email'>
+		</div>
+
+
+	
+	</div>
+
+
+	<div class='payment-info col-md-4'>
+
+		<div class='info-section'>
+		<p class='form-label'>Card Number</p>
+		<input type='text' name='card_number' size="20" data-stripe="number">
+		</div>
+
+		<div class='info-section col-md-6'>
+		<p class='form-label'>Expiration Date (mm/yy)</p>
+		<input class='col-md-5' type='text' size="2" name='exp_month' data-stripe="exp_month"><span class='col-md-2' >/</span><input class='col-md-5' type='text' size="2" name='exp_year' data-stripe="exp_year">
+		</div>
+
+		<div class='info-section col-md-3'>
+		<p class='form-label'>CVC</p>
+		<input type='text' size="3" name='email' data-stripe="cvc">
+		</div>
+
+	
+	</div>
+
+
+	<div class='padding col-sm-2 col-md-2'></div>
+
+
+	<input type='submit'>
+</form>

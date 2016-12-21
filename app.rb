@@ -141,15 +141,55 @@ get '/:product_id/buy' do |id|
 	#loads purchasing page (erb), which is form to insert purchasing info
 	
 		@item = Item.get(id.to_i)
+		erb :buy
 	
 
 
 end
 
 post '/:product_id/buy' do |id|
-	#actually buying the product
-	#sends information collected in the GET page and sends it through the Stripe API
+	@item = Item.get(id.to_i)
+	
+	Stripe.api_key = "sk_test_2xbQJY3bGbYtvZpgQbLkhdYW"
 
+	
+	token = params[:stripeToken]
+	begin
+
+	
+		charge = Stripe::Charge.create(
+	    :amount => @item.price.to_i * 100, 
+	    :currency => "cad",
+	    :source => token,
+	    :description => @item.name
+	  )
+	rescue Stripe::CardError => e
+	 
+	  body = e.json_body
+	  err  = body[:error]
+
+	  puts "Status is: #{e.http_status}"
+	  puts "Type is: #{err[:type]}"
+	  puts "Code is: #{err[:code]}"
+	  
+	  puts "Param is: #{err[:param]}"
+	  puts "Message is: #{err[:message]}"
+
+	rescue Stripe::RateLimitError => e
+	 
+	rescue Stripe::InvalidRequestError => e
+	 
+	rescue Stripe::AuthenticationError => e
+
+	rescue Stripe::APIConnectionError => e
+
+	rescue Stripe::StripeError => e
+
+	rescue => e
+
+	end
+
+	redirect to("/")
 end
 
 get '/404' do
